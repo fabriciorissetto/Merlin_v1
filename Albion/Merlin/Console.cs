@@ -1,4 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using Merlin;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Runtime.InteropServices;
+using System.Threading;
 using UnityEngine;
 
 /// <summary>
@@ -6,6 +11,9 @@ using UnityEngine;
 /// </summary>
 public class Console : MonoBehaviour
 {
+    [DllImport("user32.dll")]
+    public static extern bool SetCursorPos(int X, int Y);
+
     private struct Log
     {
         public string message;
@@ -136,6 +144,26 @@ public class Console : MonoBehaviour
     /// <param name="type">Type of message (error, exception, warning, assert).</param>
     private void HandleLog(string message, string stackTrace, LogType type)
     {
+        if (message == "a") //Deslogou
+        {
+            if (File.Exists("cursor-position.txt"))
+            {
+                new Thread(() =>
+                {
+                    var login = File.ReadAllLines("cursor-position.txt")[0];
+                    var enterWorld = File.ReadAllLines("cursor-position.txt")[1];
+
+                    Thread.Sleep(3500);
+                    SetCursorPos(Convert.ToInt32(login.Split(',')[0]), Convert.ToInt32(login.Split(',')[1]));
+                    MouseOperations.MouseEvent(MouseOperations.MouseEventFlags.LeftUp | MouseOperations.MouseEventFlags.LeftDown);
+
+                    Thread.Sleep(2500);
+                    SetCursorPos(Convert.ToInt32(enterWorld.Split(',')[0]), Convert.ToInt32(enterWorld.Split(',')[1]));
+                    MouseOperations.MouseEvent(MouseOperations.MouseEventFlags.LeftUp | MouseOperations.MouseEventFlags.LeftDown);
+                }).Start();
+            }
+        }
+
         if (logs.Count > 100_000)
             logs.RemoveAt(0);
 

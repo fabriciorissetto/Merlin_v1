@@ -74,6 +74,7 @@
   <ItemGroup>
     <Compile Include="Console.cs" />
     <Compile Include="Core.cs" />
+    <Compile Include="MouseOperations.cs" />
     <Compile Include="Profile.cs" />
     <Compile Include="Profiles\ESP\ESP.cs" />
     <Compile Include="Profiles\Gatherer\Gatherer.Helper.cs" />
