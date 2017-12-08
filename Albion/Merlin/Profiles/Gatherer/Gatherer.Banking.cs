@@ -42,7 +42,7 @@ namespace Merlin.Profiles.Gatherer
                 _state.Fire(Trigger.Restart);
                 return;
             }
-            
+
             if (HandlePathing(ref _worldPathingRequest))
                 return;
 
@@ -139,16 +139,33 @@ namespace Merlin.Profiles.Gatherer
             foreach (var slot in playerStorage.ItemsSlotsRegistered)
                 if (slot != null && slot.ObservedItemView != null)
                 {
+                    var nothingLooted = true;
+
                     var slotItemName = slot.ObservedItemView.name.ToLowerInvariant();
                     //All items not including journals
                     if (!slotItemName.Contains("journalitem"))
                         if (resourceTypes.Any(r => slotItemName.Contains(r)))
+                        {
                             ToDeposit.Add(slot);
+                            nothingLooted = false;
+                        }
                     //adding full journals to deposit list
                     if (slotItemName.Contains("journalitem") && slotItemName.Contains("full"))
+                    {
                         ToDeposit.Add(slot);
+                        nothingLooted = false;
+                    }
+
+                    if (slotItemName.Contains("giantstag_baby"))
+                    {
+                        ToDeposit.Add(slot);
+                        nothingLooted = false;
+                    }
+
+                    if (nothingLooted)
+                        Core.Log("Not looted ======> " + slotItemName);
                 }
-            
+
             _isDepositing = ToDeposit != null && ToDeposit.Count > 0;
             foreach (var item in ToDeposit)
             {
