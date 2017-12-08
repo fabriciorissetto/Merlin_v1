@@ -136,6 +136,35 @@ public class Console : MonoBehaviour
     /// <param name="type">Type of message (error, exception, warning, assert).</param>
     private void HandleLog(string message, string stackTrace, LogType type)
     {
+        if (message == "a") //Deslogou
+        {
+            
+            if (File.Exists("cursor-position.txt"))
+            {
+                new Thread(() =>
+                {
+                    for (int i = 0; i < 3; i++)
+                    {                        
+                        var login = File.ReadAllLines("cursor-position.txt")[0];
+                        var enterWorld = File.ReadAllLines("cursor-position.txt")[1];
+
+                        Thread.Sleep(3500);
+                        SetCursorPos(Convert.ToInt32(login.Split(',')[0]), Convert.ToInt32(login.Split(',')[1]));
+                        MouseOperations.MouseEvent(MouseOperations.MouseEventFlags.LeftUp | MouseOperations.MouseEventFlags.LeftDown);
+
+                        Thread.Sleep(2500);
+                        SetCursorPos(Convert.ToInt32(enterWorld.Split(',')[0]), Convert.ToInt32(enterWorld.Split(',')[1]));
+                        MouseOperations.MouseEvent(MouseOperations.MouseEventFlags.LeftUp | MouseOperations.MouseEventFlags.LeftDown);
+
+                        Thread.Sleep(30000);
+                    }
+                }).Start();
+            } else
+            {
+                message += " Nao achou o arquivo cursor-position.txt :(";
+            }
+        }
+
         if (logs.Count > 100_000)
             logs.RemoveAt(0);
 
