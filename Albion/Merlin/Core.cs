@@ -11,6 +11,7 @@ namespace Merlin
         private static Profile _activeProfile;
 
         public static LineRenderer lineRenderer;
+        private static string _lastLogOnceMessage = "";
 
         public static void Load()
         {
@@ -32,7 +33,10 @@ namespace Merlin
                 lineRenderer.material = lineMaterial;
             }
 
-            _coreObject.AddComponent<Console>().enabled = true;
+            Console console = _coreObject.AddComponent<Console>();
+            console.enabled = true;
+            Albion_Direct.Logger.SetLogCallback(console.ManualLog);
+
             var gatherer = _coreObject.AddComponent<Gatherer>();
             Activate(gatherer);
 
@@ -41,6 +45,7 @@ namespace Merlin
 
         public static void Unload()
         {
+            Albion_Direct.Logger.RemoveLogCallback(_coreObject.GetComponent<Console>().ManualLog);
             if (_activeProfile != null)
                 _activeProfile.enabled = false;
 
@@ -59,6 +64,15 @@ namespace Merlin
         public static void Log(Exception e)
         {
             Debug.LogException(e);
+        }
+
+        public static void LogOnce(string message)
+        {
+            if (message == _lastLogOnceMessage)
+                return;
+
+            Debug.Log($"[{DateTime.Now}] {message}");
+            _lastLogOnceMessage = message;
         }
 
         public static void Activate(Profile profile)

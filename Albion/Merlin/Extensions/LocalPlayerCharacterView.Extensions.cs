@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using Albion_Direct;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using YinYang.CodeProject.Projects.SimplePathfinding.Helpers;
 using YinYang.CodeProject.Projects.SimplePathfinding.PathFinders.AStar;
 
-namespace Albion_Direct
+namespace Merlin
 {
     public static class LocalPlayerCharacterViewExtensions
     {
@@ -39,9 +40,9 @@ namespace Albion_Direct
         public static bool IsInLineOfSight(this LocalPlayerCharacterView instance, FightingObjectView target)
         {
             var targetPos = target.FightingObject.h1();
-            var sightChecker = instance.PlayerCharacter.yi<aw4>();
+            var sightChecker = instance.PlayerCharacter.y9<ayw>();
 
-            return !ObjectManager.GetInstance().ObjectManager_Internal.x().f(sightChecker.n().h1(), targetPos, out var outPoint, 2);
+            return !ObjectManager.GetInstance().ObjectManager_Internal.y().f(sightChecker.n().h1(), targetPos, out var outPoint, 2);
         }
 
         public static bool RequestMove(this LocalPlayerCharacterView view, Vector3 position) => view.RequestMove(position.c());
@@ -58,20 +59,12 @@ namespace Albion_Direct
 
         public static void AttackSelectedObject(this LocalPlayerCharacterView instance) => instance.InputHandler.AttackCurrentTarget();
 
+        public static void StopAnyActionObject(this LocalPlayerCharacterView instance) => instance.InputHandler.StopAnyAction();
+
         public static bool TryFindPath(this LocalPlayerCharacterView instance, AStarPathfinder pathfinder, SimulationObjectView target,
                             StopFunction<Vector2> stopFunction, out List<Vector3> results)
         {
-            results = new List<Vector3>();
-
-            if (instance.TryFindPath(pathfinder, target.transform.position, stopFunction, out results))
-            {
-            }
-            else
-            {
-                return false;
-            }
-
-            return true;
+            return instance.TryFindPath(pathfinder, target.transform.position, stopFunction, out results);
         }
 
         public static bool TryFindPath(this LocalPlayerCharacterView instance, AStarPathfinder pathfinder, Vector3 target,
@@ -90,14 +83,12 @@ namespace Albion_Direct
             if (pathfinder.TryFindPath(startLocation, endLocation, stopFunction, out path, out pivotPoints, true))
             {
                 foreach (var point in path)
+                {
                     results.Add(new Vector3(point.x, landscape.GetTerrainHeight(point.b(), out RaycastHit hit) + 0.5f, point.y));
+                }
+                return true;
             }
-            else
-            {
-                return false;
-            }
-
-            return true;
+            return false;
         }
     }
 }

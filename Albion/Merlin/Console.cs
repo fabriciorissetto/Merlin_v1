@@ -183,4 +183,9 @@ public class Console : MonoBehaviour
             type = type,
         });
     }
+
+    public void ManualLog(string message)
+    {
+        HandleLog($"[{DateTime.Now}] {message}", "", LogType.Log);
+    }
 }
