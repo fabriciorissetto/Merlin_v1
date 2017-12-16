@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Threading;
 using UnityEngine;
 
@@ -10,6 +11,9 @@ using UnityEngine;
 /// </summary>
 public class Console : MonoBehaviour
 {
+    [DllImport("user32.dll")]
+    public static extern bool SetCursorPos(int X, int Y);
+
     private struct Log
     {
         public string message;
