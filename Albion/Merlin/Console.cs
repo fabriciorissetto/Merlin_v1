@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.IO;
+using System.Threading;
 using UnityEngine;
 
 /// <summary>
@@ -137,8 +139,7 @@ public class Console : MonoBehaviour
     private void HandleLog(string message, string stackTrace, LogType type)
     {
         if (message == "a") //Deslogou
-        {
-            
+        {            
             if (File.Exists("cursor-position.txt"))
             {
                 new Thread(() =>
