@@ -151,7 +151,13 @@ public class Console : MonoBehaviour
                 new Thread(() =>
                 {
                     for (int i = 0; i < 3; i++)
-                    {                        
+                    {
+                        if (i == 1)
+                            Thread.Sleep(30000); //waits 30 sec on second time
+
+                        if (i == 2)
+                            Thread.Sleep(3840000); //waits 64min on third time (server maintance)
+
                         var login = File.ReadAllLines("cursor-position.txt")[0];
                         var enterWorld = File.ReadAllLines("cursor-position.txt")[1];
 
@@ -162,8 +168,6 @@ public class Console : MonoBehaviour
                         Thread.Sleep(2500);
                         SetCursorPos(Convert.ToInt32(enterWorld.Split(',')[0]), Convert.ToInt32(enterWorld.Split(',')[1]));
                         MouseOperations.MouseEvent(MouseOperations.MouseEventFlags.LeftUp | MouseOperations.MouseEventFlags.LeftDown);
-
-                        Thread.Sleep(30000);
                     }
                 }).Start();
             } else
