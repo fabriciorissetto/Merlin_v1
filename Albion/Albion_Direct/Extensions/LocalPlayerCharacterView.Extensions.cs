@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using YinYang.CodeProject.Projects.SimplePathfinding.Helpers;
@@ -38,10 +39,10 @@ namespace Albion_Direct
 
         public static bool IsInLineOfSight(this LocalPlayerCharacterView instance, FightingObjectView target)
         {
-            var targetPos = target.FightingObject.h1();
+            var targetPos = target.FightingObject.h3();
             var sightChecker = instance.PlayerCharacter.zb<ayw>();
 
-            return !ObjectManager.GetInstance().ObjectManager_Internal.y().f(sightChecker.n().h1(), targetPos, out var outPoint, 2);
+            return !ObjectManager.GetInstance().ObjectManager_Internal.y().f(sightChecker.n().h3(), targetPos, out var outPoint, 2);
         }
 
         public static bool RequestMove(this LocalPlayerCharacterView view, Vector3 position) => view.RequestMove(position.c());
@@ -52,7 +53,10 @@ namespace Albion_Direct
 
         public static void CastOn(this LocalPlayerCharacterView instance, CharacterSpellSlot slot, FightingObjectView target) => instance.InputHandler.CastOn(slot, target);
 
-        public static void CastAt(this LocalPlayerCharacterView instance, CharacterSpellSlot slot, Vector3 target) => instance.InputHandler.CastAt(slot, target);
+        public static void CastAt(this LocalPlayerCharacterView instance, CharacterSpellSlot slot, Vector3 target)
+        {            
+            instance.InputHandler.CastAt(slot, target);
+        }
 
         public static void SetSelectedObject(this LocalPlayerCharacterView instance, SimulationObjectView target) => instance.InputHandler.SetSelectedObject(target);
 
